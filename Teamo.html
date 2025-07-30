@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te Amoo</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+            color: #EE27F5;
+            font-family: 'Courier New', monospace;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .terminal-text {
+            z-index: 1;
+            font-size: clamp(2em, 5vw, 5em);
+            text-shadow: 0 0 10px #EE27F5;
+            animation: blink 1s step-start infinite;
+            padding: 0.2em;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="rain"></canvas>
+    <div class="terminal-text">te amoo muchoo ❤</div>
+    <div class="terminal-text">Por un mes más juntos</div>
+
+    <script>
+        const canvas = document.getElementById('rain');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        resizeCanvas();
+
+        const fontSize = 16;
+        const speed = 0.15; // Puedes ajustar esta variable para cambiar la velocidad
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = Array.from({ length: columns }, () => Math.random() * canvas.height / fontSize);
+
+        function drawRain() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#EE27F5';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                ctx.fillText("te amo", i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i] += speed;
+            }
+
+            requestAnimationFrame(drawRain);
+        }
+
+        drawRain();
+    </script>
+</body>
+
+</html>
